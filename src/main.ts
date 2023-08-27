@@ -63,7 +63,7 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath("/draco/");
 gltfLoader.setDRACOLoader(dracoLoader);
 let left_door: THREE.Group;
-gltfLoader.load("/box/16_door.gltf", (gltf) => {
+gltfLoader.load("./box/16_door.gltf", (gltf) => {
   gltf.scene.name = "left_door";
   left_door = gltf.scene;
   gltf.scene.scale.set(0.03, 0.03, 0.03);
@@ -124,7 +124,7 @@ function createLattice(
 let fridge_door: THREE.Group;
 let fridge: GLTF;
 gltfLoader.load(
-  "/box/32.gltf",
+  "./box/32.gltf",
   (gltf) => {
     gltf.scene.scale.set(0.03, 0.03, 0.03);
     const doorLight = new THREE.PointLight("#ffffff", 1, 7);
