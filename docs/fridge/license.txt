@@ -1,0 +1,11 @@
+Model Information:
+* title:	Fridge
+* source:	https://sketchfab.com/3d-models/fridge-df9a8f7f4b5a4dd3b6bcad6a8bdc1ad2
+* author:	Red Fox / nokillnando (https://sketchfab.com/nokillnando)
+
+Model License:
+* license type:	CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)
+* requirements:	Author must be credited. Modified versions must have the same license. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Fridge" (https://sketchfab.com/3d-models/fridge-df9a8f7f4b5a4dd3b6bcad6a8bdc1ad2) by Red Fox / nokillnando (https://sketchfab.com/nokillnando) licensed under CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)

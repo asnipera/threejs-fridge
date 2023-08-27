@@ -1,0 +1,11 @@
+Model Information:
+* title:	Fridge [Low Poly]
+* source:	https://sketchfab.com/3d-models/fridge-low-poly-842f2b3484a14a619986e844841f7376
+* author:	Islide (https://sketchfab.com/Islide)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Fridge [Low Poly]" (https://sketchfab.com/3d-models/fridge-low-poly-842f2b3484a14a619986e844841f7376) by Islide (https://sketchfab.com/Islide) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

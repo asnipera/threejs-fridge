@@ -154,7 +154,6 @@ gltfLoader.load(
     createSqureAndLattice(settings.rowCount, settings.colCount);
     scene.add(gltf.scene);
   },
-  (progress) => {},
   (error) => {
     console.log("error");
     console.log(error);
@@ -211,7 +210,7 @@ function hideBoxAndLattice() {
 // );
 
 // Controls
-const controls = new OrbitControls(camera, renderer.domElement);
+new OrbitControls(camera, renderer.domElement);
 
 // 创建面板的几何体
 const geometry = new THREE.PlaneGeometry(2, 2);
@@ -350,7 +349,6 @@ function getContainerObjByChild(obj: any) {
   else return null;
 }
 const bHelper = new THREE.BoxHelper(new THREE.Mesh(), 0x00ffff);
-let currentId: string = "";
 let curreentBox: THREE.Object3D<THREE.Event>;
 function onWindowClick(event: any) {
   if (!fridge) return;
@@ -368,7 +366,6 @@ function onWindowClick(event: any) {
     if (intersectedObj) {
       const id = intersectedObj.userData.id;
       if (id) {
-        currentId = id;
         const boxHelper = boxHelpers.find((helper) => helper[id]);
         if (boxHelper) {
           const box = boxHelper[id];
