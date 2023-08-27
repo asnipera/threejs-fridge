@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { Tween, Easing, update } from "three/examples/jsm/libs/tween.module.js";
 // gui
@@ -116,6 +116,7 @@ function createLattice(
 }
 
 let fridge_door: THREE.Group;
+let fridge: GLTF;
 gltfLoader.load(
   "/box/32.gltf",
   (gltf) => {
@@ -135,21 +136,6 @@ gltfLoader.load(
     gltf.scene.add(doorLight);
     scene.add(doorLightHelper);
 
-    gltf.scene.traverse((item) => {
-      if (item.name === "Cube") {
-        item.castShadow = true;
-        createSquare(5, 5, item, gltf.scene, 4.2);
-        item.visible = false;
-      }
-    });
-
-    gltf.scene.traverse((item) => {
-      if (item.name === "Box033_Chrome_0001") {
-        item.castShadow = true;
-        createLattice(5, item, gltf.scene);
-        item.visible = false;
-      }
-    });
     // const _scene2 = gltf.scene.clone();
     // _scene2.name = "right_door";
     // // _scene2.rotation.y = -Math.PI;
@@ -158,6 +144,8 @@ gltfLoader.load(
     // right_door = _scene2;
     // gltf.scene.add(doorLight);
     // scene.add(doorLightHelper);
+    fridge = gltf;
+    createSqureAndLattice(settings.rowCount, settings.colCount);
     scene.add(gltf.scene);
   },
   (progress) => {},
@@ -166,6 +154,36 @@ gltfLoader.load(
     console.log(error);
   }
 );
+
+function createSqureAndLattice(row: number, column: number) {
+  console.log(row, column);
+
+  fridge.scene.traverse((item) => {
+    if (item.name === "Cube") {
+      item.castShadow = true;
+      item.visible = true;
+      createSquare(row, column, item, fridge.scene, 4.2);
+      item.visible = false;
+    }
+  });
+
+  fridge.scene.traverse((item) => {
+    if (item.name === "Box033_Chrome_0001") {
+      item.castShadow = true;
+      item.visible = true;
+      createLattice(row, item, fridge.scene);
+      item.visible = false;
+    }
+  });
+}
+
+function hideBoxAndLattice() {
+  fridge.scene.traverse((item) => {
+    if (item.name.startsWith("square") || item.name.startsWith("lattice")) {
+      item.visible = false;
+    }
+  });
+}
 
 // gltfLoader.load(
 //   "/box/16_square_1.gltf",
@@ -284,3 +302,30 @@ folder
     "click"
   )
   .name("关闭");
+
+const settings = {
+  rowCount: 1,
+  colCount: 5,
+};
+
+const settingFolder = gui.addFolder("设置");
+
+// rowCount改变时，重新渲染层数
+
+settingFolder
+  .add(settings, "rowCount", 1, 6, 1)
+  .name("行数")
+  .onChange((value: number) => {
+    hideBoxAndLattice();
+    settings.rowCount = value;
+    createSqureAndLattice(settings.rowCount, settings.colCount);
+  });
+
+settingFolder
+  .add(settings, "colCount", 1, 5, 1)
+  .name("列数")
+  .onChange((value: number) => {
+    hideBoxAndLattice();
+    settings.colCount = value;
+    createSqureAndLattice(settings.rowCount, settings.colCount);
+  });
