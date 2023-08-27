@@ -311,6 +311,7 @@ folder
 const settings = {
   rowCount: 3,
   colCount: 5,
+  showModal: false,
 };
 
 const settingFolder = gui.addFolder("设置");
@@ -333,6 +334,14 @@ settingFolder
     hideBoxAndLattice();
     settings.colCount = value;
     createSqureAndLattice(settings.rowCount, settings.colCount);
+  });
+
+// settingFolder添加一个CheckBox
+settingFolder
+  .add(settings, "showModal")
+  .name("显示库存")
+  .onChange((value: boolean) => {
+    settings.showModal = value;
   });
 
 function getContainerObjByChild(obj: any) {
@@ -394,7 +403,7 @@ window.addEventListener("click", function (event: any) {
       const id = intersectedObj.userData.id;
       if (id) {
         const _x = curreentBox.userData.open ? -10 : -48;
-        if (!curreentBox.userData.open) curreentBox.userData.open = true;
+        curreentBox.userData.open = !curreentBox.userData.open;
         fridge.scene.remove(bHelper);
         new Tween(curreentBox.position)
           .to(
@@ -405,7 +414,38 @@ window.addEventListener("click", function (event: any) {
             1000
           )
           .easing(Easing.Linear.None)
-          .start();
+          .start()
+          .onComplete(() => {
+            if (!curreentBox.userData.open || !settings.showModal) return;
+            // 写一个模态框，显示数据
+            const modal = document.createElement("div");
+            modal.style.position = "absolute";
+            modal.style.top = "0";
+            modal.style.left = "0";
+            modal.style.width = "100%";
+            modal.style.height = "100%";
+            modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+            modal.style.zIndex = "999";
+            modal.style.display = "flex";
+            modal.style.justifyContent = "center";
+            // paddingtop 30px
+            modal.style.paddingTop = "30px";
+            modal.style.alignItems = "top";
+            modal.style.color = "#fff";
+            modal.style.fontSize = "20px";
+            modal.style.fontWeight = "bold";
+            modal.style.cursor = "pointer";
+            const id = curreentBox.userData.id;
+            const row = id.split("_")[0];
+            const col = id.split("_")[1];
+            modal.innerText = `您查看的是${Number(row) + 1}行，第${
+              Number(col) + 1
+            }列的库位，`;
+            document.body.appendChild(modal);
+            modal.addEventListener("click", () => {
+              document.body.removeChild(modal);
+            });
+          });
       } else {
         fridge.scene.remove(bHelper);
       }
