@@ -74,6 +74,7 @@ gltfLoader.load("/box/16_door.gltf", (gltf) => {
 });
 
 let squareHeight = 0;
+let boxHelpers: Record<string, THREE.Object3D<THREE.Event>>[] = [];
 function createSquare(
   row: number,
   column: number,
@@ -86,6 +87,10 @@ function createSquare(
   for (let i = 0; i < row; i++) {
     for (let j = 0; j < column; j++) {
       const _square = square.clone();
+      _square.userData.id = `${i}_${j}`;
+      boxHelpers.push({
+        [_square.userData.id]: _square,
+      });
       _square.name = `${prefixName}_${i}_${j}`;
       const box = new THREE.Box3().setFromObject(_square);
       const size = box.getSize(new THREE.Vector3());
@@ -93,6 +98,7 @@ function createSquare(
       _square.position.setY(_square.position.y + size.y * i + rowSpan * i);
       _square.position.setZ(_square.position.z + size.z * j + colSpan * j);
       _square.receiveShadow = true;
+      _square.userData.isContainer = true;
       fridge.add(_square);
     }
   }
@@ -156,6 +162,7 @@ gltfLoader.load(
 );
 
 function createSqureAndLattice(row: number, column: number) {
+  boxHelpers = [];
   fridge.scene.traverse((item) => {
     if (item.name === "Cube") {
       item.castShadow = true;
@@ -327,3 +334,42 @@ settingFolder
     settings.colCount = value;
     createSqureAndLattice(settings.rowCount, settings.colCount);
   });
+
+function getContainerObjByChild(obj: any) {
+  if (obj.userData.isContainer) return obj;
+  else if (obj.parent != null) return getContainerObjByChild(obj.parent);
+  else return null;
+}
+const bHelper = new THREE.BoxHelper(new THREE.Mesh(), 0x00ffff);
+let currentId: string = "";
+function onWindowClick(event: any) {
+  if (!fridge) return;
+  const pointer = new THREE.Vector2();
+  pointer.set(
+    (event.clientX / window.innerWidth) * 2 - 1,
+    -(event.clientY / window.innerHeight) * 2 + 1
+  );
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(fridge.scene.children, true);
+  // Get the intersected object
+  if (intersects && intersects.length > 0) {
+    const intersectedObj = getContainerObjByChild(intersects[0].object);
+    if (intersectedObj) {
+      const id = intersectedObj.userData.id;
+      if (id) {
+        currentId = id;
+        const boxHelper = boxHelpers.find((helper) => helper[id]);
+        if (boxHelper) {
+          const box = boxHelper[id];
+          const helper = bHelper.setFromObject(box);
+          scene.add(helper);
+        }
+      } else {
+        fridge.scene.remove(bHelper);
+      }
+    }
+  }
+}
+
+window.addEventListener("mousemove", onWindowClick);
