@@ -1,0 +1,11 @@
+Model Information:
+* title:	USSR Fridge
+* source:	https://sketchfab.com/3d-models/ussr-fridge-5a0ba464174e4dbe94aecfe1a036ca6a
+* author:	LongLight (https://sketchfab.com/LongLight)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "USSR Fridge" (https://sketchfab.com/3d-models/ussr-fridge-5a0ba464174e4dbe94aecfe1a036ca6a) by LongLight (https://sketchfab.com/LongLight) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
