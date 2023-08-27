@@ -26,7 +26,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(-4, 1.5, 1.2);
+camera.position.set(-6, 1.5, 1.2);
 
 // 创建渲染器
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -156,8 +156,6 @@ gltfLoader.load(
 );
 
 function createSqureAndLattice(row: number, column: number) {
-  console.log(row, column);
-
   fridge.scene.traverse((item) => {
     if (item.name === "Cube") {
       item.castShadow = true;
@@ -262,7 +260,7 @@ function angleToRadian(angle: number) {
 }
 
 // 创建gui单击按钮
-const gui = new GUI();
+const gui = new GUI({ width: 200 });
 const folder = gui.addFolder("操作");
 folder
   .add(
@@ -282,7 +280,7 @@ folder
     },
     "click"
   )
-  .name("打开");
+  .name("开门");
 
 folder
   .add(
@@ -301,10 +299,10 @@ folder
     },
     "click"
   )
-  .name("关闭");
+  .name("关门");
 
 const settings = {
-  rowCount: 1,
+  rowCount: 3,
   colCount: 5,
 };
 
