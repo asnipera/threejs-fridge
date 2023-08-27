@@ -342,6 +342,7 @@ function getContainerObjByChild(obj: any) {
 }
 const bHelper = new THREE.BoxHelper(new THREE.Mesh(), 0x00ffff);
 let currentId: string = "";
+let curreentBox: THREE.Object3D<THREE.Event>;
 function onWindowClick(event: any) {
   if (!fridge) return;
   const pointer = new THREE.Vector2();
@@ -362,8 +363,10 @@ function onWindowClick(event: any) {
         const boxHelper = boxHelpers.find((helper) => helper[id]);
         if (boxHelper) {
           const box = boxHelper[id];
+          curreentBox = box;
           const helper = bHelper.setFromObject(box);
-          scene.add(helper);
+          if (box.userData.open) scene.remove(helper);
+          else scene.add(helper);
         }
       } else {
         fridge.scene.remove(bHelper);
@@ -373,3 +376,39 @@ function onWindowClick(event: any) {
 }
 
 window.addEventListener("mousemove", onWindowClick);
+
+window.addEventListener("click", function (event: any) {
+  if (!fridge) return;
+  const pointer = new THREE.Vector2();
+  pointer.set(
+    (event.clientX / window.innerWidth) * 2 - 1,
+    -(event.clientY / window.innerHeight) * 2 + 1
+  );
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(fridge.scene.children, true);
+  // Get the intersected object
+  if (intersects && intersects.length > 0) {
+    const intersectedObj = getContainerObjByChild(intersects[0].object);
+    if (intersectedObj) {
+      const id = intersectedObj.userData.id;
+      if (id) {
+        const _x = curreentBox.userData.open ? -10 : -48;
+        if (!curreentBox.userData.open) curreentBox.userData.open = true;
+        fridge.scene.remove(bHelper);
+        new Tween(curreentBox.position)
+          .to(
+            {
+              // 45度
+              x: _x,
+            },
+            1000
+          )
+          .easing(Easing.Linear.None)
+          .start();
+      } else {
+        fridge.scene.remove(bHelper);
+      }
+    }
+  }
+});
